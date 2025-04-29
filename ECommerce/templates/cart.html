@@ -1,0 +1,29 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Shop</title>
+        <link rel="stylesheet" href="{% static 'css/cart.css' %}">
+</head>
+<body>
+
+    <nav class="navbar">
+        <ul>
+            <li><a href="/shop">SHOP</a></li>
+            <li><a href="/cart">CART</a></li>
+
+            <li class="logo-item">
+                <a href="{% url 'home' %}">
+                    <img src="{% static 'images/logo.png' %}" alt="Logo" class="logo">
+                </a>
+            </li>
+    
+            <li><a href="/orders">ORDERS</a></li>
+            <li><a href="/account">ACCOUNT</a></li>
+        </ul>
+    </nav>
+</body>
+</html>

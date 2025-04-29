@@ -1,0 +1,96 @@
+/* home.css */
+
+body {
+    background-color: #fafafa;  /* Light background color */
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Navbar Styles */
+.navbar {
+    background-color: #333;
+    padding: 10px 0;
+    position: sticky;
+    top: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center; /* Center all the content */
+    align-items: center; /* Vertically center the content */
+}
+
+
+.navbar ul {
+    list-style: none;
+    display: flex;
+    justify-content: space-between; /* Distribute space evenly between items */
+    margin: 0;
+    padding: 0;
+    width: 100%; /* Ensure the list takes up the full width */
+    max-width: 1200px; /* Optional: Max width to prevent stretching on large screens */
+    align-items: center; /* Vertically center the content */
+    height: 80px; /* Set a fixed height to prevent shrinking when logo changes size */
+}
+
+.navbar li {
+    margin: 0 20px; /* Adjust spacing between navbar items */
+}
+
+.navbar a {
+    text-decoration: none;
+    color: white;
+    font-size: 1.2rem;
+}   
+/* Styling for the logo container */
+.navbar .logo-item {
+    position: relative;
+    margin: 0;
+}
+
+.logo {
+    height: 100px; /* Adjust size as needed */
+}
+
+.navbar a:hover {
+    color: #f39c12;
+}
+
+/* Shop Page Search Bar Styling */
+.shop-search-container {
+    text-align: center;
+    margin-top: 20px; /* Add some space from the top of the page */
+    margin-bottom: 40px; /* Space below the search bar */
+}
+
+.search-form {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.search-input {
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 300px; /* Adjust width as needed */
+    margin-right: 10px;
+}
+
+.search-button {
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-button:hover {
+    background-color: #2980b9; /* Darker blue when hovered */
+}
+
+
+
