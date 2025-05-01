@@ -5,6 +5,108 @@ body {
     padding: 0;
 }
 
+.background-container {
+    background-image: url('/static/images/2.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: fixed;  
+    top: 0;
+    left: 0;
+    width: 100%;      
+    height: 100%;     
+    z-index: -1;     
+}
+
+.background-container::after {
+    content: '';
+    position: absolute;
+    height: 100%;    
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.30); 
+}
+
+/* Styling for the login container */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+}
+
+.login-form {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 40px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    align-items: center;
+}
+
+.login-form h2 {
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+}
+
+.btn {
+    background-color: #3498db;
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: background-color 0.3s ease;
+
+}
+
+.btn:hover {
+    background-color: #2980b9;
+}
+
+/* Styling for the signup link */
+.signup-link {
+    margin-top: 15px;
+    font-size: 1rem;
+}
+
+.signup-link a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.signup-link a:hover {
+    text-decoration: underline;
+}
+
+
 /* Navbar Styles */
 .navbar {
     background-color: #333;
@@ -53,6 +155,53 @@ body {
     color: #f39c12;
 }
 
+.cart-sidebar {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    top: 0;
+    right: 0;
+    background-color: #f9f9f9;
+    overflow-x: hidden;
+    transition: 0.4s;
+    padding-top: 60px;
+    z-index: 1001;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.3);
+    transition: width 0.3s ease;
+}
+
+.cart-sidebar.open {
+    width: 320px;
+}
+
+.cart-sidebar .close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.cart-sidebar .sidebar-content {
+    padding: 20px;
+}
+
+body.cart-open {
+    overflow: hidden;
+}
+
+.overlay {
+    transition: opacity 0.3s ease;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.overlay.show {
+    display: block;
+    opacity: 1;
+    pointer-events: all;
+}
 
 
 

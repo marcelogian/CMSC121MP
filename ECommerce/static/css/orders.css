@@ -52,3 +52,51 @@ body {
 .navbar a:hover {
     color: #f39c12;
 }   
+
+.cart-sidebar {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    top: 0;
+    right: 0;
+    background-color: #f9f9f9;
+    overflow-x: hidden;
+    transition: 0.4s;
+    padding-top: 60px;
+    z-index: 1001;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.3);
+    transition: width 0.3s ease;
+}
+
+.cart-sidebar.open {
+    width: 320px;
+}
+
+.cart-sidebar .close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.cart-sidebar .sidebar-content {
+    padding: 20px;
+}
+
+body.cart-open {
+    overflow: hidden;
+}
+
+.overlay {
+    transition: opacity 0.3s ease;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.overlay.show {
+    display: block;
+    opacity: 1;
+    pointer-events: all;
+}

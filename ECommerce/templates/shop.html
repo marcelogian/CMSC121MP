@@ -13,7 +13,7 @@
     <nav class="navbar">
         <ul>
             <li><a href="/shop">SHOP</a></li>
-            <li><a href="/cart">CART</a></li>
+            <li><a href="#" id="cartButton">CART</a></li>
 
             <li class="logo-item">
                 <a href="{% url 'home' %}">
@@ -33,6 +33,48 @@
             <button type="submit" class="search-button">Search</button>
         </form>
     </div>
+    
+<!-- Sidebar Cart -->
+<div id="cartSidebar" class="cart-sidebar">
+    <span class="close-btn" onclick="closeCart()">&times;</span>
+    <div class="sidebar-content">
+        <h2>Your Cart</h2>
+        <p>No items yet...</p>
+    </div>
+</div>
 
+<!-- Overlay -->
+<div id="cartOverlay" class="overlay" onclick="closeCart()"></div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get the cart button
+        const cartButton = document.getElementById('cartButton');
+        
+        // Add click event
+        cartButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            openCart();
+        });
+        
+        function openCart() {
+            console.log('Opening cart...');
+            document.getElementById('cartSidebar').classList.add('open');
+            document.getElementById('cartOverlay').classList.add('show');
+            document.body.classList.add('cart-open');
+        }
+        
+        function closeCart() {
+            console.log('Closing cart...');
+            document.getElementById('cartSidebar').classList.remove('open');
+            document.getElementById('cartOverlay').classList.remove('show');
+            document.body.classList.remove('cart-open');
+        }
+        
+        // Make functions available globally if needed
+        window.openCart = openCart;
+        window.closeCart = closeCart;
+    });
+</script>
     </body>
     </html>

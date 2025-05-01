@@ -1,8 +1,31 @@
 body {
-    background-color: #fafafa;  
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+}
+
+.background-container {
+    background-image: url('/static/images/1.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: fixed;  
+    top: 0;
+    left: 0;
+    width: 100%;      
+    height: 100%;     
+    z-index: -1;     
+}
+
+.background-container::after {
+    content: '';
+    position: absolute;
+    height: 100%;    
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.30); 
 }
 
 /* Navbar Styles */
@@ -13,10 +36,10 @@ body {
     top: 0;
     width: 100%;
     display: flex;
-    justify-content: center; /* Center all the content */
-    align-items: center; /* Vertically center the content */
+    justify-content: center;
+    align-items: center;
+    z-index: 1; 
 }
-
 
 .navbar ul {
     list-style: none;
@@ -30,7 +53,6 @@ body {
     height: 80px; 
 }
 
-
 .navbar li {
     margin: 0 20px; 
 }
@@ -40,7 +62,7 @@ body {
     color: white;
     font-size: 1.2rem;
 }   
-/* Styling for the logo container */
+
 .navbar .logo-item {
     position: relative;
     margin: 0;
@@ -54,7 +76,6 @@ body {
     color: #f39c12;
 }
 
-
 .content-container {
     display: flex;
     justify-content: center;
@@ -62,10 +83,58 @@ body {
     height: 100vh;
     text-align: center;
     position: relative;
-
+    z-index: 1; 
 }
 
-.shop-button .btn{
+.cart-sidebar {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    top: 0;
+    right: 0;
+    background-color: #f9f9f9;
+    overflow-x: hidden;
+    transition: 0.4s;
+    padding-top: 60px;
+    z-index: 1001;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.3);
+    transition: width 0.3s ease;
+}
+
+.cart-sidebar.open {
+    width: 320px;
+}
+
+.cart-sidebar .close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.cart-sidebar .sidebar-content {
+    padding: 20px;
+}
+
+body.cart-open {
+    overflow: hidden;
+}
+
+.overlay {
+    transition: opacity 0.3s ease;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.overlay.show {
+    display: block;
+    opacity: 1;
+    pointer-events: all;
+}
+
+.shop-button .btn {
     padding: 20px 50px;
     background: linear-gradient(135deg, #3498db, #6dd5fa);
     color: white;
@@ -78,7 +147,6 @@ body {
     cursor: pointer;
     font-weight: bold;
     letter-spacing: 1px;
-    margin-bottom: 1000px;
 }
 
 .shop-button .btn:hover {
@@ -86,6 +154,3 @@ body {
     box-shadow: 0 10px 25px rgba(41, 128, 185, 0.5);
     transform: translateY(-3px);
 }
-
-
-

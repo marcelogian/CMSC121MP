@@ -6,11 +6,11 @@ def home(request):
 def shop(request):
     return render(request, 'shop.html')
 
-def cart(request):
-    return render(request, 'cart.html')
-
 def account(request):
     return render(request, 'account.html')
 
 def orders(request):
     return render(request, 'orders.html')
+
+def signup(request):
+    return render(request, 'signup.html')

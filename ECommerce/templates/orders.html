@@ -6,14 +6,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Shop</title>
-        <link rel="stylesheet" href="{% static 'css/orderss.css' %}">
+        <link rel="stylesheet" href="{% static 'css/orders.css' %}">
 </head>
 <body>
 
     <nav class="navbar">
         <ul>
             <li><a href="/shop">SHOP</a></li>
-            <li><a href="/cart">CART</a></li>
+            <li><a href="#" id="cartButton">CART</a></li>
 
             <li class="logo-item">
                 <a href="{% url 'home' %}">
@@ -25,6 +25,46 @@
             <li><a href="/account">ACCOUNT</a></li>
         </ul>
     </nav>
+
+<!-- Sidebar Cart -->
+<div id="cartSidebar" class="cart-sidebar">
+    <span class="close-btn" onclick="closeCart()">&times;</span>
+    <div class="sidebar-content">
+        <h2>Your Cart</h2>
+        <p>No items yet...</p>
+    </div>
+</div>
+
+<!-- Overlay -->
+<div id="cartOverlay" class="overlay" onclick="closeCart()"></div>
+
+<!-- Functionalities of the side bar -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        const cartButton = document.getElementById('cartButton');
+        
+        cartButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            openCart();
+        });
+        
+        function openCart() {
+            document.getElementById('cartSidebar').classList.add('open');
+            document.getElementById('cartOverlay').classList.add('show');
+            document.body.classList.add('cart-open');
+        }
+        
+        function closeCart() {
+            document.getElementById('cartSidebar').classList.remove('open');
+            document.getElementById('cartOverlay').classList.remove('show');
+            document.body.classList.remove('cart-open');
+        }
+        
+        window.openCart = openCart;
+        window.closeCart = closeCart;
+    });
+</script>
 
 </body>
 </html>

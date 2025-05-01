@@ -5,15 +5,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Shop</title>
-        <link rel="stylesheet" href="{% static 'css/account.css' %}">
+    <title>Your Shop - Login</title>
+    <link rel="stylesheet" href="{% static 'css/account.css' %}">
 </head>
 <body>
 
+    <!-- Navbar -->
     <nav class="navbar">
         <ul>
             <li><a href="/shop">SHOP</a></li>
-            <li><a href="/cart">CART</a></li>
+            <li><a href="#" id="cartButton">CART</a></li>
 
             <li class="logo-item">
                 <a href="{% url 'home' %}">
@@ -25,6 +26,73 @@
             <li><a href="/account">ACCOUNT</a></li>
         </ul>
     </nav>
+
+    <!-- Background container -->
+    <div class="background-container"></div>
+
+    <!-- Login Form -->
+    <div class="login-container">
+        <div class="login-form">
+            <h2>Login to Your Account</h2>
+            <form action="/login" method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn">Login</button>
+                </div>
+            </form>
+            <p class="signup-link">Don't have an account? <a href="/signup">Sign up</a></p>
+        </div>
+    </div>
+
+    <!-- Sidebar Cart -->
+    <div id="cartSidebar" class="cart-sidebar">
+        <span class="close-btn" onclick="closeCart()">&times;</span>
+        <div class="sidebar-content">
+            <h2>Your Cart</h2>
+            <p>No items yet...</p>
+        </div>
+    </div>
+
+    <!-- Overlay -->
+    <div id="cartOverlay" class="overlay" onclick="closeCart()"></div>
+
+    <!-- Functionalities of the side bar -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const cartButton = document.getElementById('cartButton');
+            
+            cartButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                openCart();
+            });
+            
+            function openCart() {
+                console.log('Opening cart...');
+                document.getElementById('cartSidebar').classList.add('open');
+                document.getElementById('cartOverlay').classList.add('show');
+                document.body.classList.add('cart-open');
+            }
+            
+            function closeCart() {
+                console.log('Closing cart...');
+                document.getElementById('cartSidebar').classList.remove('open');
+                document.getElementById('cartOverlay').classList.remove('show');
+                document.body.classList.remove('cart-open');
+            }
+            
+            window.openCart = openCart;
+            window.closeCart = closeCart;
+        });
+    </script>
 
 </body>
 </html>
