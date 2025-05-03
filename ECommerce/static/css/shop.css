@@ -1,5 +1,3 @@
-/* home.css */
-
 body {
     background-color: #fafafa;  /* Light background color */
     font-family: Arial, sans-serif;
@@ -9,50 +7,86 @@ body {
 
 /* Navbar Styles */
 .navbar {
-    background-color: #333;
-    padding: 10px 0;
+    background-color: rgba(42, 42, 42, 100);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    padding: 12px 0;
     position: sticky;
     top: 0;
     width: 100%;
     display: flex;
-    justify-content: center; /* Center all the content */
-    align-items: center; /* Vertically center the content */
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
 }
-
 
 .navbar ul {
     list-style: none;
     display: flex;
-    justify-content: space-between; /* Distribute space evenly between items */
+    justify-content: space-between;
     margin: 0;
     padding: 0;
-    width: 100%; /* Ensure the list takes up the full width */
-    max-width: 1200px; /* Optional: Max width to prevent stretching on large screens */
-    align-items: center; /* Vertically center the content */
-    height: 80px; /* Set a fixed height to prevent shrinking when logo changes size */
+    width: 100%;
+    max-width: 1200px;
+    align-items: center;
+    height: 70px;
 }
 
 .navbar li {
-    margin: 0 20px; /* Adjust spacing between navbar items */
+    margin: 0 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
 }
 
 .navbar a {
     text-decoration: none;
     color: white;
-    font-size: 1.2rem;
-}   
-/* Styling for the logo container */
+    font-size: 1.1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    padding: 5px 0;
+}
+
+.nav-icon-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: white;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+}
+
+.nav-icon-link i {
+    font-size: 1.5rem;
+    margin-bottom: 4px;
+}
+
+.nav-icon-link:hover {
+    color: #f39c12;
+}
+
 .navbar .logo-item {
     position: relative;
     margin: 0;
 }
 
 .logo {
-    height: 100px; /* Adjust size as needed */
+    margin-top: 10px;
+    height: 80px; 
 }
 
-.navbar a:hover {
+.navbar li:not(.logo-item) a:hover {
     color: #f39c12;
+    border-bottom: 2px solid #f39c12;
+    padding-bottom: 2px;
+}
+
+.navbar .logo-item a:hover img {
+    transform: scale(1.1); 
+    filter: brightness(1.1); 
+    transition: transform 0.3s ease; 
 }
 
 .cart-sidebar {
@@ -106,8 +140,8 @@ body.cart-open {
 /* Shop Page Search Bar Styling */
 .shop-search-container {
     text-align: center;
-    margin-top: 20px; /* Add some space from the top of the page */
-    margin-bottom: 40px; /* Space below the search bar */
+    margin-top: 20px; 
+    margin-bottom: 40px; 
 }
 
 .search-form {
@@ -121,7 +155,7 @@ body.cart-open {
     font-size: 1rem;
     border: 1px solid #ccc;
     border-radius: 5px;
-    width: 300px; /* Adjust width as needed */
+    width: 300px; 
     margin-right: 10px;
 }
 
@@ -137,7 +171,7 @@ body.cart-open {
 }
 
 .search-button:hover {
-    background-color: #2980b9; /* Darker blue when hovered */
+    background-color: #2980b9; 
 }
 
 

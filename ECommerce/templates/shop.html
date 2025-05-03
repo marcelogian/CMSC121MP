@@ -6,25 +6,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Shop</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
         <link rel="stylesheet" href="{% static 'css/shop.css' %}">
 </head>
 <body>
 
     <nav class="navbar">
         <ul>
-            <li><a href="/shop">SHOP</a></li>
-            <li><a href="#" id="cartButton">CART</a></li>
-
+            <li>
+                <a href="/shop" class="nav-icon-link">
+                    <i class="bi bi-basket2-fill"></i>
+                    <span>SHOP</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" id="cartButton" class="nav-icon-link">
+                    <i class="bi bi-cart-fill"></i>
+                    <span>CART</span>
+                </a>
+            </li>
+    
             <li class="logo-item">
                 <a href="{% url 'home' %}">
                     <img src="{% static 'images/logo.png' %}" alt="Logo" class="logo">
                 </a>
             </li>
     
-            <li><a href="/orders">ORDERS</a></li>
-            <li><a href="/account">ACCOUNT</a></li>
+            <li>
+                <a href="/orders" class="nav-icon-link">
+                    <i class="bi bi-bag-fill"></i>
+                    <span>ORDERS</span>
+                </a>
+            </li>
+            <li>
+                <a href="/account" class="nav-icon-link">
+                    <i class="bi bi-person-fill"></i>
+                    <span>ACCOUNT</span>
+                </a>
+            </li>
         </ul>
     </nav>
+    
 
 
     <div class="shop-search-container">
