@@ -33,7 +33,15 @@
             <button type="submit" class="search-button">Search</button>
         </form>
     </div>
-    
+    {% for product in products %}
+        <div class="product">
+            <h3>{{ product.name }}</h3>
+            <p>{{ product.description }}</p>
+            p>Price: {{ product.price }}</p>
+        </div>
+        {% empty %}
+            <p>No products found.</p>
+    {% endfor %}
 <!-- Sidebar Cart -->
 <div id="cartSidebar" class="cart-sidebar">
     <span class="close-btn" onclick="closeCart()">&times;</span>

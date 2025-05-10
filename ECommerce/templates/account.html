@@ -34,7 +34,7 @@
     <div class="login-container">
         <div class="login-form">
             <h2>Login to Your Account</h2>
-            <form action="/login" method="POST">
+            <form method="POST">
                 {% csrf_token %}
                 <div class="form-group">
                     <label for="username">Username</label>
@@ -48,6 +48,10 @@
                     <button type="submit" class="btn">Login</button>
                 </div>
             </form>
+            {{form.errors}}
+            {% for message in messages %}
+                        <p id="messages">{{message}}</p>
+            {% endfor %}
             <p class="signup-link">Don't have an account? <a href="/signup">Sign up</a></p>
         </div>
     </div>
