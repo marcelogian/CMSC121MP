@@ -1,0 +1,91 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Shop</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+        <link rel="stylesheet" href="{% static 'css/orders.css' %}">
+</head>
+<body>
+
+    <nav class="navbar">
+        <ul>
+            <li>
+                <a href="/shop" class="nav-icon-link">
+                    <i class="bi bi-basket2-fill"></i>
+                    <span>SHOP</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" id="cartButton" class="nav-icon-link">
+                    <i class="bi bi-cart-fill"></i>
+                    <span>CART</span>
+                </a>
+            </li>
+    
+            <li class="logo-item">
+                <a href="{% url 'home' %}">
+                    <img src="{% static 'images/logo.png' %}" alt="Logo" class="logo">
+                </a>
+            </li>
+    
+            <li>
+                <a href="/orders" class="nav-icon-link">
+                    <i class="bi bi-bag-fill"></i>
+                    <span>ORDERS</span>
+                </a>
+            </li>
+            <li>
+                <a href="/account" class="nav-icon-link">
+                    <i class="bi bi-person-fill"></i>
+                    <span>ACCOUNT</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    
+<!-- Sidebar Cart -->
+<div id="cartSidebar" class="cart-sidebar">
+    <span class="close-btn" onclick="closeCart()">&times;</span>
+    <div class="sidebar-content">
+        <h2>Your Cart</h2>
+        <p>No items yet...</p>
+    </div>
+</div>
+
+<!-- Overlay -->
+<div id="cartOverlay" class="overlay" onclick="closeCart()"></div>
+
+<!-- Functionalities of the side bar -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        const cartButton = document.getElementById('cartButton');
+        
+        cartButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            openCart();
+        });
+        
+        function openCart() {
+            document.getElementById('cartSidebar').classList.add('open');
+            document.getElementById('cartOverlay').classList.add('show');
+            document.body.classList.add('cart-open');
+        }
+        
+        function closeCart() {
+            document.getElementById('cartSidebar').classList.remove('open');
+            document.getElementById('cartOverlay').classList.remove('show');
+            document.body.classList.remove('cart-open');
+        }
+        
+        window.openCart = openCart;
+        window.closeCart = closeCart;
+    });
+</script>
+
+</body>
+</html>
