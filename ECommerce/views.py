@@ -4,6 +4,12 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_protect
 from .models import Product, Order, OrderItem, Cart, CartItem
+from .forms import CustomUserCreationForm
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import logout
+from django.shortcuts import render, redirect
+from .forms import ProductForm
+from django.http import HttpResponseForbidden
 
 
 def home(request):
@@ -65,3 +71,76 @@ def orders(request):
 
 def signup(request):
     return render(request, 'signup.html')
+
+def signup(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('account')  # or wherever you want to redirect
+    else:
+        form = CustomUserCreationForm()
+    return render(request, 'signup.html', {'form': form})
+
+def login_view(request):
+    from django.contrib.auth.forms import AuthenticationForm
+    from django.contrib.auth import login
+    from django.contrib import messages
+
+    if request.user.is_authenticated:
+        return render(request, 'account.html')  # already logged in
+
+    form = AuthenticationForm(request, data=request.POST or None)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            login(request, form.get_user())
+            return redirect('account')  # back to account page to now see logout
+        else:
+            messages.error(request, "Invalid username or password.")
+
+    return render(request, 'account.html', {'form': form})
+
+def logout_view(request):
+    logout(request)
+    return redirect('account')
+
+@login_required
+def selling_screen(request):
+    if request.user.id != 1:
+        return redirect('account')
+
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES)  # include request.FILES for image uploads
+        if form.is_valid():
+            form.save()
+            
+            if '_addanother' in request.POST:
+                messages.success(request, "Product saved. Add another.")
+                return redirect('selling_screen')
+            
+    else:
+        form = ProductForm()
+
+    return render(request, 'selling_screen.html', {'form': form})
+
+@login_required
+def edit_product(request, product_id):
+    if request.user.id != 1:
+        return redirect('shop')  # only allow user ID 1 to access
+
+    product = get_object_or_404(Product, ID=product_id)
+
+    if request.method == 'POST':
+        if 'delete' in request.POST:
+            product.delete()
+            return redirect('shop')
+        
+        form = ProductForm(request.POST, request.FILES, instance=product)
+        if form.is_valid():
+            form.save()
+            return redirect('edit_product', product_id=product_id)
+    else:
+        form = ProductForm(instance=product)
+
+    return render(request, 'edit_product.html', {'form': form, 'product': product})
