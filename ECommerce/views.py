@@ -40,15 +40,33 @@ def login_view(request):
     return render(request, 'account.html')
 
 @login_required
-def add_to_cart(request, product_id):
-    cart, _ = Cart.objects.get_or_create(user=request.user)
-    product = get_object_or_404(Product, id=product_id)
-    item, created = CartItem.objects.get_or_create(cart=cart, product=product)
-    if not created:
-        item.quantity += 1
-        item.save()
-    return redirect('shop')
+def add_to_cart(request):
+    if request.method == 'POST':
+        product_id = request.POST.get('product_id')
+        quantity = int(request.POST.get('quantity'))
 
+        product = get_object_or_404(Product, pk=product_id)
+
+        # Check stock
+        if product.stock < quantity:
+            # Optionally show error with messages framework
+            return redirect('shop')
+
+        # Get or create user's cart
+        cart, _ = Cart.objects.get_or_create(user=request.user)
+
+        # Get or create cart item
+        cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+        cart_item.quantity += quantity
+        cart_item.save()
+
+        # Reduce stock
+        product.stock -= quantity
+        product.save()
+
+        return redirect('shop')  # or wherever you want after adding
+
+    return redirect('shop')
 @login_required
 def remove_from_cart(request, product_id):
     cart = get_object_or_404(Cart, user=request.user)

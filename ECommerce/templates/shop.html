@@ -73,7 +73,12 @@
                             <div class="d-flex align-items-center mt-3">
                                 <form method="POST" action="{#{% url 'add_to_cart' product.ID %}#}" class="me-2">
                                     {% csrf_token %}
-                                    <button type="submit" class="btngreen">Buy</button>
+                                    <button type="button" class="btngreen" data-bs-toggle="modal" data-bs-target="#quantityModal" 
+                                            data-product-id="{{ product.ID }}" 
+                                            data-product-name="{{ product.name }}"
+                                            data-stock="{{ product.stock }}">
+                                        Buy
+                                    </button>
                                 </form>
                             
                                 {% if request.user.id == 1 %}
@@ -100,35 +105,81 @@
 <!-- Overlay -->
 <div id="cartOverlay" class="overlay" onclick="closeCart()"></div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Get the cart button
-        const cartButton = document.getElementById('cartButton');
-        
-        // Add click event
-        cartButton.addEventListener('click', function(e) {
-            e.preventDefault();
-            openCart();
-        });
-        
-        function openCart() {
-            console.log('Opening cart...');
-            document.getElementById('cartSidebar').classList.add('open');
-            document.getElementById('cartOverlay').classList.add('show');
-            document.body.classList.add('cart-open');
-        }
-        
-        function closeCart() {
-            console.log('Closing cart...');
-            document.getElementById('cartSidebar').classList.remove('open');
-            document.getElementById('cartOverlay').classList.remove('show');
-            document.body.classList.remove('cart-open');
-        }
-        
-        // Make functions available globally if needed
-        window.openCart = openCart;
-        window.closeCart = closeCart;
-    });
-</script>
-    </body>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Get the cart button
+                const cartButton = document.getElementById('cartButton');
+                
+                // Add click event
+                cartButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    openCart();
+                });
+                
+                function openCart() {
+                    console.log('Opening cart...');
+                    document.getElementById('cartSidebar').classList.add('open');
+                    document.getElementById('cartOverlay').classList.add('show');
+                    document.body.classList.add('cart-open');
+                }
+                
+                function closeCart() {
+                    console.log('Closing cart...');
+                    document.getElementById('cartSidebar').classList.remove('open');
+                    document.getElementById('cartOverlay').classList.remove('show');
+                    document.body.classList.remove('cart-open');
+                }
+                
+                // Make functions available globally if needed
+                window.openCart = openCart;
+                window.closeCart = closeCart;
+            });
+        </script>
+
+            <!-- Quantity Modal -->
+            <div class="modal fade" id="quantityModal" tabindex="-1" aria-labelledby="quantityModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                <form method="POST" action="{% url 'add_to_cart' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="product_id" id="modalProductId">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="quantityModalLabel">Add to Cart</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p id="modalProductName" class="fw-bold"></p>
+                        <p>Stock Available: <span id="modalStock"></span></p>
+                        <label for="modalQuantity">Quantity:</label>
+                        <input type="number" name="quantity" id="modalQuantity" class="form-control" min="1" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Confirm</button>
+                    </div>
+                    </div>
+                </form>
+                </div>
+            </div>
+            
+            <!-- Bootstrap & Quantity Modal Script -->
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                const quantityModal = document.getElementById('quantityModal');
+                quantityModal.addEventListener('show.bs.modal', function (event) {
+                    const button = event.relatedTarget;
+                    const productId = button.getAttribute('data-product-id');
+                    const productName = button.getAttribute('data-product-name');
+                    const stock = button.getAttribute('data-stock');
+            
+                    // Populate modal
+                    document.getElementById('modalProductId').value = productId;
+                    document.getElementById('modalProductName').textContent = productName;
+                    document.getElementById('modalStock').textContent = stock;
+                    document.getElementById('modalQuantity').value = 1;
+                    document.getElementById('modalQuantity').max = stock;
+                });
+                });
+            </script>
+        </body>
     </html>

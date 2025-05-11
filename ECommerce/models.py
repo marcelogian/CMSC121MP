@@ -29,11 +29,17 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"{self.quantity} x {self.product.name}"
-    
+
 class Cart(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"Cart {self.pk} for {self.user.username}"
 
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, to_field='ID', on_delete=models.CASCADE)
+    product = models.ForeignKey('Product', on_delete=models.CASCADE) 
     quantity = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.quantity} of {self.product.name} in Cart {self.cart_id}"
