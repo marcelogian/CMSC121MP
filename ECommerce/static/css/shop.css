@@ -174,5 +174,35 @@ body.cart-open {
     background-color: #2980b9; 
 }
 
+.card {
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: white;
+    transition: transform 0.2s ease;
+}
 
+.card:hover {
+    transform: translateY(-5px);
+}
 
+.card-img-top {
+    height: 250px;
+    object-fit: cover;
+}
+
+.btngreen {
+    background-color: #218d39 !important;
+    color: white !important;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    display: inline-block;
+    text-align: center;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+}
+
+.btngreen:hover {
+    background-color: #1a6f2f !important;
+}

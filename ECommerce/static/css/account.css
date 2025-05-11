@@ -171,6 +171,30 @@ body {
 
 }
 
+.btngreen {
+    background-color: #218d39;
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: background-color 0.3s ease;
+
+}
+
+.btnred {
+    background-color: #e32121;
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: background-color 0.3s ease;
+
+}
+
 .btn:hover {
     background-color: #2980b9;
 }

@@ -118,7 +118,6 @@ def selling_screen(request):
             if '_addanother' in request.POST:
                 messages.success(request, "Product saved. Add another.")
                 return redirect('selling_screen')
-            
     else:
         form = ProductForm()
 
