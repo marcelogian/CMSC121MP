@@ -1,7 +1,11 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
+html, body {
+font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+   width: 100%;
+    height: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .background-container {
@@ -25,7 +29,81 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.30); 
+    background-color: rgba(255, 255, 255, 0.2); 
+}
+
+.title-image-container {
+    text-align: center;
+    margin-top: -150px;
+    opacity: 0;
+    animation: fadeIn 2s forwards; 
+}
+
+.title-image {
+    max-width: 120%;
+    width: 40%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+.image-row {
+  display: flex;
+  justify-content: center; 
+  gap: 5px;                
+  margin-top: -150px;
+  opacity: 0;
+  animation: fadeIn 2s forwards;
+}
+
+.buy-image-container,
+.sell-image-container
+.wield-image-container {
+  margin: 0;
+  text-align: center;
+  animation: fadeIn 2s forwards;
+}
+
+.buy-image,
+.sell-image,
+.wield-image {
+  max-width: 600px;
+  width: 100%;
+  height: auto;
+}
+
+.image2-row {
+  display: flex;
+  justify-content: center; 
+  gap: 5px;                
+  margin-top: 0px;
+  opacity: 0;
+  animation: fadeIn 2s forwards;
+}
+
+.buy2-image-container,
+.sell2-image-container
+.wield2-image-container {
+  margin: 0;
+  text-align: center;
+  animation: fadeIn 2s forwards;
+}
+
+.buy2-image,
+.sell2-image,
+.wield2s-image {
+  max-width: 600px;
+  width: 100%;
+  height: auto;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
 /* Navbar Styles */
@@ -116,7 +194,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 8vh;
     text-align: center;
     position: relative;
     z-index: 1; 
@@ -168,6 +246,10 @@ body.cart-open {
     display: block;
     opacity: 1;
     pointer-events: all;
+}
+
+.shop-button {
+  text-align: center;     /* Center inline elements like button or links */     /* Optional: centers block if it has a fixed width */
 }
 
 .shop-button .btn {

@@ -47,16 +47,48 @@
             </li>
         </ul>
     </nav>
-    
 
-        <!-- Other Content-->
-        <div class="background-container"></div>
-    <div class="content-container">
-        <div class="shop-button">
+
+
+ <!-- Other Content -->
+<!-- Title Image -->
+<div class="title-image-container">
+  <img src="{% static 'images/title.png' %}" alt="Welcome Banner" class="title-image">
+</div>
+
+<!-- Row of Images -->
+<div class="image-row">
+  <div class="buy-image-container">
+        <img src="{% static 'images/buy.png' %}" alt="Buy Imager" class="buy-image">
+
+  </div>
+  <div class="sell-image-container">
+    <img src="{% static 'images/sell.png' %}" alt="Sell Imager" class="sell-image">
+  </div>
+  <div class="wield-image-container">
+    <img src="{% static 'images/wield.png' %}" alt="Wield Imager" class="wield-image">
+  </div>
+</div>
+
+<!-- 2nd Row of Images -->
+<div class="image2-row">
+  <div class="buy2-image-container">
+        <img src="{% static 'images/buy2.png' %}" alt="Buy2 Imager" class="buy2-image">
+
+  </div>
+  <div class="sell2-image-container">
+    <img src="{% static 'images/sell2.png' %}" alt="Sell2 Imager" class="sell2-image">
+  </div>
+  <div class="wield2-image-container">
+    <img src="{% static 'images/wield2.png' %}" alt="Wield2 Imager" class="wield2-image">
+  </div>
+</div>
+<div class="shop-button">
             <a href="/shop" class="btn">SHOP NOW!</a>
         </div>
-    </div>
-
+        <div class="background-container"></div>
+    <div class="content-container"></div>
+ 
     <!-- Sidebar Cart -->
     <div id="cartSidebar" class="cart-sidebar">
         <span class="close-btn" onclick="closeCart()">&times;</span>

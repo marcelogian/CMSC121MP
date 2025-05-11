@@ -34,6 +34,18 @@ body {
     background-color: rgba(0, 0, 0, 0.30); 
 }
 
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
 .signup-container {
     background-color: rgba(255, 255, 255, 0.85);
     padding: 40px 40px;
@@ -42,7 +54,7 @@ body {
     width: 100%;
     max-width: 400px;
     transition: box-shadow 0.3s ease;
-
+    animation: slideInLeft 0.5s ease forwards;
 }
 
 .signup-container:hover {
@@ -65,9 +77,9 @@ body {
 
 .form-group label {
     font-weight: 500;
-    margin-bottom: 6px;
+    margin-bottom: 1px;
     display: block;
-    margin-left: -15px;
+    margin-left: -2px;
 }
 
 .form-group input {
@@ -75,7 +87,7 @@ body {
     padding: 12px 14px;
     font-size: 15px;
     border: 1px solid #ccc;
-    border-radius: 10px;
+    border-radius: 25px;
     transition: border-color 0.3s, box-shadow 0.3s;
     margin-left: -15px;
 }
