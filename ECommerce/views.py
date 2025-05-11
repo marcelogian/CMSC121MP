@@ -18,7 +18,17 @@ def home(request):
 
 def shop_view(request):
     products = Product.objects.all()
-    return render(request, 'shop.html', {'products': products})
+    cart_items = []
+
+    if request.user.is_authenticated:
+        cart = Cart.objects.filter(user=request.user).first()
+        if cart:
+            cart_items = CartItem.objects.filter(cart=cart).select_related('product')
+
+    return render(request, 'shop.html', {
+        'products': products,
+        'cart_items': cart_items,
+    })
 
 def product_search(request):
     query = request.GET.get('q')
@@ -47,30 +57,26 @@ def add_to_cart(request):
 
         product = get_object_or_404(Product, pk=product_id)
 
-        # Check stock
+
         if product.stock < quantity:
-            # Optionally show error with messages framework
             return redirect('shop')
 
-        # Get or create user's cart
         cart, _ = Cart.objects.get_or_create(user=request.user)
 
-        # Get or create cart item
+
         cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
         cart_item.quantity += quantity
         cart_item.save()
 
-        # Reduce stock
-        product.stock -= quantity
-        product.save()
-
-        return redirect('shop')  # or wherever you want after adding
+        return redirect('shop') 
 
     return redirect('shop')
+
 @login_required
-def remove_from_cart(request, product_id):
+def remove_from_cart(request, item_id):
     cart = get_object_or_404(Cart, user=request.user)
-    CartItem.objects.filter(cart=cart, product_id=product_id).delete()
+    item = get_object_or_404(CartItem, id=item_id, cart=cart)
+    item.delete()
     return redirect('shop')
 
 @login_required
