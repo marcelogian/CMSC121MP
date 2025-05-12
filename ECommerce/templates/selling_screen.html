@@ -14,7 +14,7 @@
             background-color: white;
             padding: 2rem;
             border-radius: 6px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
             margin-top: 2rem;
         }
         .right-buttons {
@@ -26,53 +26,47 @@
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="row">
-        <!-- Left form panel -->
-        <div class="col-md-9">
-            <div class="form-container">
-                <h4>Add a New Product</h4>
-                <form method="POST" enctype="multipart/form-data" id="form-id">
-                    {% csrf_token %}
-                    
-                    <div class="mb-3">
-                        <label for="id_name" class="form-label fw-bold">Name <span class="text-danger">*</span></label><br>
-                        {{ form.name }}
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="id_description" class="form-label fw-bold">Description <span class="text-danger">*</span></label><br>
-                        {{ form.description }}
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="id_price" class="form-label fw-bold">Price <span class="text-danger">*</span></label><br>
-                        {{ form.price }}
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="id_stock" class="form-label fw-bold">Stock <span class="text-danger">*</span></label><br>
-                        {{ form.stock }}
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="id_image" class="form-label fw-bold">Image</label><br><br>
-                        {{ form.image }}
-                    </div>
-                </form>
+    <div class="container">
+        <div class="row">
+            <!-- Left form panel -->
+            <div class="col-md-9">
+                <div class="form-container">
+                    <h4>Add a New Product</h4>
+                    <form method="POST" enctype="multipart/form-data" id="form-id">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="id_name" class="form-label fw-bold">Name <span class="text-danger">*</span></label><br>
+                            {{ form.name }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_description" class="form-label fw-bold">Description <span class="text-danger">*</span></label><br>
+                            {{ form.description }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_price" class="form-label fw-bold">Price <span class="text-danger">*</span></label><br>
+                            {{ form.price }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_stock" class="form-label fw-bold">Stock <span class="text-danger">*</span></label><br>
+                            {{ form.stock }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_image" class="form-label fw-bold">Image</label><br>
+                            {{ form.image }}
+                        </div>
+                    </form>
+                </div>
             </div>
-        </div>
 
-        <!-- Right save buttons -->
-        <div class="col-md-3">
-            <div class="right-buttons">
-                <br>
-                <button type="submit" form="form-id" name="_addanother" class="btngreen">Save and Add Another</button>
-                <a href="{% url 'shop' %}" class="btn">Go to Shop</a>
-                <a href="{% url 'account' %}" class="btn">Back to your Account</a>
+            <!-- Right save buttons -->
+            <div class="col-md-3">
+                <div class="right-buttons">
+                    <button type="submit" form="form-id" name="_addanother" class="btngreen">Save and Add Another</button>
+                    <a href="{% url 'shop' %}" class="btn">Go to Shop</a>
+                    <a href="{% url 'account' %}" class="btn">Back to your Account</a>
+                </div>
             </div>
         </div>
     </div>
-</div>
 </body>
 </html>

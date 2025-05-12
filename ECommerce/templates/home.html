@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Shop</title>
+    <title>Home</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/shop.css' %}">
@@ -16,35 +16,11 @@
 
 <nav class="navbar" style="position: relative; z-index: 10;">
     <ul>
-        <li>
-            <a href="/shop" class="nav-icon-link">
-                <i class="bi bi-basket2-fill"></i>
-                <span>SHOP</span>
-            </a>
-        </li>
-        <li>
-            <a href="#" id="cartButton" class="nav-icon-link">
-                <i class="bi bi-cart-fill"></i>
-                <span>CART</span>
-            </a>
-        </li>
-        <li class="logo-item">
-            <a href="{% url 'home' %}">
-                <img src="{% static 'images/logo.png' %}" alt="Logo" class="logo">
-            </a>
-        </li>
-        <li>
-            <a href="/orders" class="nav-icon-link">
-                <i class="bi bi-bag-fill"></i>
-                <span>ORDERS</span>
-            </a>
-        </li>
-        <li>
-            <a href="/account" class="nav-icon-link">
-                <i class="bi bi-person-fill"></i>
-                <span>ACCOUNT</span>
-            </a>
-        </li>
+        <li><a href="/shop" class="nav-icon-link"><i class="bi bi-basket2-fill"></i><span>SHOP</span></a></li>
+        <li><a href="#" id="cartButton" class="nav-icon-link"><i class="bi bi-cart-fill"></i><span>CART</span></a></li>
+        <li class="logo-item"><a href="{% url 'home' %}"><img src="{% static 'images/logo.png' %}" alt="Logo" class="logo"></a></li>
+        <li><a href="/orders" class="nav-icon-link"><i class="bi bi-bag-fill"></i><span>ORDERS</span></a></li>
+        <li><a href="/account" class="nav-icon-link"><i class="bi bi-person-fill"></i><span>ACCOUNT</span></a></li>
     </ul>
 </nav>
 
@@ -58,36 +34,33 @@
 </div>
 
 <!-- Cart Sidebar - appears above navbar -->
-<div id="cartSidebar" class="cart-sidebar"
-     style="position: fixed; top: 0; right: 0; width: 300px; height: 100%; z-index: 1000; background-color: white; transform: translateX(100%); transition: transform 0.3s ease;">
+<div id="cartSidebar" class="cart-sidebar" style="position: fixed; top: 0; right: 0; width: 300px; height: 100%; z-index: 1000; background-color: white; transform: translateX(100%); transition: transform 0.3s ease;">
     <span class="close-btn" onclick="closeCart()" style="cursor: pointer; font-size: 1.5rem; position: absolute; top: 10px; right: 15px;">&times;</span>
     <div class="sidebar-content p-3 mt-4">
         <h2>Your Cart</h2>
         {% if user.is_authenticated and cart_items %}
-        <a href="{% url 'checkout' %}" class="btn btn-primary checkout-btn" style="display: block; margin-bottom: 1rem; width: 100%;">
-            Checkout
-        </a>
+            <a href="{% url 'checkout' %}" class="btn btn-primary checkout-btn" style="display: block; margin-bottom: 1rem; width: 100%;">Checkout</a>
             {% for item in cart_items %}
-            <div class="card mb-3 border-0 shadow-sm">
-                <div class="row g-0 align-items-center">
-                    <div class="col-4">
-                        {% if item.product.image %}
-                        <img src="{{ item.product.image.url }}" class="img-fluid rounded-start" style="height: 80px; object-fit: cover;" alt="{{ item.product.name }}">
-                        {% endif %}
-                    </div>
-                    <div class="col-8">
-                        <div class="card-body p-2">
-                            <h6 class="card-title mb-1">{{ item.product.name }}</h6>
-                            <p class="card-text mb-1"><small>{{ item.product.description|truncatewords:10 }}</small></p>
-                            <p class="card-text mb-1">Qty: {{ item.quantity }}</p>
-                            <form method="POST" action="{% url 'remove_from_cart' item.id %}">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-sm btn-danger">Remove</button>
-                            </form>
+                <div class="card mb-3 border-0 shadow-sm">
+                    <div class="row g-0 align-items-center">
+                        <div class="col-4">
+                            {% if item.product.image %}
+                                <img src="{{ item.product.image.url }}" class="img-fluid rounded-start" style="height: 80px; object-fit: cover;" alt="{{ item.product.name }}">
+                            {% endif %}
+                        </div>
+                        <div class="col-8">
+                            <div class="card-body p-2">
+                                <h6 class="card-title mb-1">{{ item.product.name }}</h6>
+                                <p class="card-text mb-1"><small>{{ item.product.description|truncatewords:10 }}</small></p>
+                                <p class="card-text mb-1">Qty: {{ item.quantity }}</p>
+                                <form method="POST" action="{% url 'remove_from_cart' item.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
             {% endfor %}
         {% elif user.is_authenticated %}
             <p class="text-muted">No items yet...</p>
@@ -98,10 +71,7 @@
 </div>
 
 <!-- Overlay behind the cart -->
-<div id="cartOverlay" class="overlay"
-     style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 900; display: none;"
-     onclick="closeCart()">
-</div>
+<div id="cartOverlay" class="overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 900; display: none;" onclick="closeCart()"></div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {

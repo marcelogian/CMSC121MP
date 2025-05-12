@@ -1,5 +1,5 @@
 body {
-    background-color: #fafafa;  
+    background-color: #fafafa;
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
@@ -7,7 +7,7 @@ body {
 
 /* Navbar Styles */
 .navbar {
-    background-color: rgba(42, 42, 42, 100);
+    background-color: rgba(42, 42, 42, 1);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     padding: 12px 0;
     position: sticky;
@@ -23,11 +23,11 @@ body {
     list-style: none;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     margin: 0;
     padding: 0;
     width: 100%;
     max-width: 1200px;
-    align-items: center;
     height: 70px;
 }
 
@@ -63,32 +63,33 @@ body {
     margin-bottom: 4px;
 }
 
-.nav-icon-link:hover {
+.nav-icon-link:hover,
+.navbar li:not(.logo-item) a:hover {
     color: #f39c12;
-}
-
-.navbar .logo-item {
-    position: relative;
-    margin: 0;
-}
-
-.logo {
-    margin-top: 10px;
-    height: 80px; 
 }
 
 .navbar li:not(.logo-item) a:hover {
-    color: #f39c12;
     border-bottom: 2px solid #f39c12;
     padding-bottom: 2px;
 }
 
-.navbar .logo-item a:hover img {
-    transform: scale(1.1); 
-    filter: brightness(1.1); 
-    transition: transform 0.3s ease; 
+.navbar .logo-item {
+    margin: 0;
+    position: relative;
 }
 
+.logo {
+    margin-top: 10px;
+    height: 80px;
+}
+
+.navbar .logo-item a:hover img {
+    transform: scale(1.1);
+    filter: brightness(1.1);
+    transition: transform 0.3s ease;
+}
+
+/* Cart Sidebar */
 .cart-sidebar {
     height: 100%;
     width: 0;
@@ -97,10 +98,9 @@ body {
     right: 0;
     background-color: #f9f9f9;
     overflow-x: hidden;
-    transition: 0.4s;
     padding-top: 60px;
     z-index: 1001;
-    box-shadow: -2px 0 5px rgba(0,0,0,0.3);
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
     transition: width 0.3s ease;
 }
 
@@ -140,8 +140,7 @@ body.cart-open {
 /* Shop Page Search Bar Styling */
 .shop-search-container {
     text-align: center;
-    margin-top: 20px; 
-    margin-bottom: 40px; 
+    margin: 20px 0 40px;
 }
 
 .search-form {
@@ -155,7 +154,7 @@ body.cart-open {
     font-size: 1rem;
     border: 1px solid #ccc;
     border-radius: 5px;
-    width: 300px; 
+    width: 300px;
     margin-right: 10px;
 }
 
@@ -171,9 +170,10 @@ body.cart-open {
 }
 
 .search-button:hover {
-    background-color: #2980b9; 
+    background-color: #2980b9;
 }
 
+/* Card Styles */
 .card {
     border-radius: 10px;
     overflow: hidden;
@@ -209,9 +209,8 @@ body.cart-open {
 
 .card.out-of-stock {
     opacity: 0.5;
-    pointer-events: none; /* prevents any clicks inside */
+    pointer-events: none;
 }
-
 
 .stock-overlay {
     position: absolute;

@@ -96,9 +96,7 @@
         <h2>Your Cart</h2>
     
         {% if user.is_authenticated and cart_items %}
-            <a href="{% url 'checkout' %}" class="btn btn-primary checkout-btn" style="display: block; margin-bottom: 1rem; width: 100%;">
-                Checkout
-            </a>
+            <a href="{% url 'checkout' %}" class="btn btn-primary checkout-btn" style="display: block; margin-bottom: 1rem; width: 100%;">Checkout</a>
             {% for item in cart_items %}
             <div class="card mb-3 border-0 shadow-sm">
                 <div class="row g-0 align-items-center">

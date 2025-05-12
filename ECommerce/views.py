@@ -4,15 +4,10 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_protect
 from .models import Product, Order, OrderItem, Cart, CartItem
-from .forms import CustomUserCreationForm
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth import logout
-from django.shortcuts import render, redirect
-from .forms import ProductForm
+from .forms import CustomUserCreationForm, ProductForm
 from django.http import HttpResponseForbidden
 from django.utils import timezone
 from django.db import transaction
-
 
 def home(request):
     cart_items = []
@@ -23,7 +18,6 @@ def home(request):
             cart_items = CartItem.objects.filter(cart=cart).select_related('product')
 
     return render(request, 'home.html', {'cart_items': cart_items})
-
 
 def shop_view(request):
     products = Product.objects.all()
@@ -52,18 +46,16 @@ def add_to_cart(request):
 
         product = get_object_or_404(Product, pk=product_id)
 
-
         if product.stock < quantity:
             return redirect('shop')
 
         cart, _ = Cart.objects.get_or_create(user=request.user)
 
-
         cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
         cart_item.quantity += quantity
         cart_item.save()
 
-        return redirect('shop') 
+        return redirect('shop')
 
     return redirect('shop')
 
@@ -146,16 +138,12 @@ def signup(request):
     return render(request, 'signup.html', {'form': form})
 
 def login_view(request):
-    from django.contrib.auth.forms import AuthenticationForm
-    from django.contrib.auth import login
-    from django.contrib import messages
-
     if request.user.is_authenticated:
         cart_items = []
         cart = Cart.objects.filter(user=request.user).first()
         if cart:
             cart_items = CartItem.objects.filter(cart=cart).select_related('product')
-        return render(request, 'account.html', {'cart_items': cart_items})  # <-- send cart_items
+        return render(request, 'account.html', {'cart_items': cart_items})
 
     form = AuthenticationForm(request, data=request.POST or None)
 
@@ -181,7 +169,7 @@ def selling_screen(request):
         form = ProductForm(request.POST, request.FILES)  # include request.FILES for image uploads
         if form.is_valid():
             form.save()
-            
+
             if '_addanother' in request.POST:
                 messages.success(request, "Product saved. Add another.")
                 return redirect('selling_screen')
@@ -201,7 +189,7 @@ def edit_product(request, product_id):
         if 'delete' in request.POST:
             product.delete()
             return redirect('shop')
-        
+
         form = ProductForm(request.POST, request.FILES, instance=product)
         if form.is_valid():
             form.save()
@@ -210,8 +198,6 @@ def edit_product(request, product_id):
         form = ProductForm(instance=product)
 
     return render(request, 'edit_product.html', {'form': form, 'product': product})
-
-from django.utils import timezone
 
 @login_required
 def orders(request):
