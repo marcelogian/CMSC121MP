@@ -11,6 +11,7 @@ from django.shortcuts import render, redirect
 from .forms import ProductForm
 from django.http import HttpResponseForbidden
 from django.utils import timezone
+from django.db import transaction
 
 
 def home(request):
@@ -77,6 +78,7 @@ def remove_from_cart(request, item_id):
     return redirect('shop')  # fallback if no referer
 
 @login_required
+@transaction.atomic
 def checkout_view(request):
     cart = get_object_or_404(Cart, user=request.user)
     cart_items_qs = CartItem.objects.filter(cart=cart).select_related('product')
@@ -105,12 +107,25 @@ def checkout_view(request):
             return redirect('checkout')
 
         order = Order.objects.create(user=request.user)
+
         for ci in cart_items_qs:
+            product = ci.product
+
+            # Double-check for stock before processing
+            if ci.quantity > product.stock:
+                messages.error(request, f"Not enough stock for {product.name}.")
+                return redirect('checkout')
+
             OrderItem.objects.create(
                 order=order,
-                product=ci.product,
+                product=product,
                 quantity=ci.quantity
             )
+
+            # Deduct stock
+            product.stock -= ci.quantity
+            product.save()
+
         cart_items_qs.delete()
         return redirect('orders')
 
