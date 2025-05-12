@@ -206,3 +206,21 @@ body.cart-open {
 .btngreen:hover {
     background-color: #1a6f2f !important;
 }
+
+.card.out-of-stock {
+    opacity: 0.5;
+    pointer-events: none; /* prevents any clicks inside */
+}
+
+
+.stock-overlay {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: rgba(255, 0, 0, 0.8);
+    color: white;
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.25rem;
+    font-weight: bold;
+    font-size: 0.9rem;
+}

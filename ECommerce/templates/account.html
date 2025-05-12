@@ -1,3 +1,8 @@
+{% if request.GET.must_login %}
+  <script>
+    alert("You must log in first.");
+  </script>
+{% endif %}
 {% load static %}
 
 <!DOCTYPE html>
@@ -12,7 +17,6 @@
     <link rel="stylesheet" href="{% static 'css/account.css' %}">
 </head>
 <body>
-
     <nav class="navbar">
         <ul>
             <li>

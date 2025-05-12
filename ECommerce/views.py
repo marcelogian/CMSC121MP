@@ -10,6 +10,7 @@ from django.contrib.auth import logout
 from django.shortcuts import render, redirect
 from .forms import ProductForm
 from django.http import HttpResponseForbidden
+from django.utils import timezone
 
 
 def home(request):
@@ -80,25 +81,29 @@ def checkout_view(request):
     cart = get_object_or_404(Cart, user=request.user)
     cart_items_qs = CartItem.objects.filter(cart=cart).select_related('product')
 
-    cart_items_qs = (
-        CartItem.objects
-        .filter(cart=cart)
-        .select_related('product')
-    )
-
     line_items = []
     total = 0
+    has_oos = False
+
     for ci in cart_items_qs:
-        subtotal = ci.quantity * ci.product.price
+        product = ci.product
+        subtotal = ci.quantity * product.price
         total += subtotal
+
+        if product.stock == 0:
+            has_oos = True
+
         line_items.append({
-            'item_id':  ci.id,  
-            'product':   ci.product,
-            'quantity':  ci.quantity,
-            'subtotal':  subtotal,
+            'item_id':  ci.id,
+            'product':  product,
+            'quantity': ci.quantity,
+            'subtotal': subtotal,
         })
 
     if request.method == 'POST':
+        if has_oos:
+            return redirect('checkout')
+
         order = Order.objects.create(user=request.user)
         for ci in cart_items_qs:
             OrderItem.objects.create(
@@ -112,6 +117,7 @@ def checkout_view(request):
     return render(request, 'checkout.html', {
         'line_items': line_items,
         'total':      total,
+        'has_oos':    has_oos,
     })
 
 def signup(request):
@@ -190,6 +196,8 @@ def edit_product(request, product_id):
 
     return render(request, 'edit_product.html', {'form': form, 'product': product})
 
+from django.utils import timezone
+
 @login_required
 def orders(request):
     cart_items = []
@@ -197,5 +205,26 @@ def orders(request):
         cart = Cart.objects.filter(user=request.user).first()
         if cart:
             cart_items = CartItem.objects.filter(cart=cart).select_related('product')
-    return render(request, 'orders.html', {'cart_items': cart_items})
 
+    if request.user.id == 1:
+        orders_qs = Order.objects.all().prefetch_related('orderitem_set__product').select_related('user')
+    else:
+        orders_qs = Order.objects.filter(user=request.user).prefetch_related('orderitem_set__product')
+
+    order_data = []
+    for order in orders_qs:
+        items = order.orderitem_set.all()
+        delivered = order.delivery_date is not None and order.delivery_date <= timezone.now()
+        order_data.append({
+            'id': order.id,
+            'date_ordered': order.date_ordered,
+            'delivery_date': order.delivery_date,
+            'delivered': delivered,
+            'items': items
+        })
+
+    return render(request, 'orders.html', {
+        'cart_items': cart_items,
+        'orders': order_data,
+        'now': timezone.now(),
+    })

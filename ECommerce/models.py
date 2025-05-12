@@ -5,9 +5,6 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 
 def random_delivery_time():
-    """
-    Returns a datetime 5–30 minutes from now.
-    """
     minutes = random.randint(5, 30)
     return timezone.now() + timedelta(minutes=minutes)
 
@@ -35,10 +32,6 @@ class Order(models.Model):
 
     @property
     def delivered(self):
-        """
-        Returns True exactly once now >= delivery_date.
-        No need to store this in the DB or run any jobs.
-        """
         return timezone.now() >= self.delivery_date
 
 class OrderItem(models.Model):

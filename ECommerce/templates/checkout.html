@@ -53,54 +53,53 @@
     {% if line_items %}
       <form method="post">
         {% csrf_token %}
-  
         <div class="row row-cols-1 row-cols-md-2 g-4">
           {% for item in line_items %}
+            {% with product=item.product %}
             <div class="col">
-              <div class="card h-100 shadow border-0">
-                {% if item.product.image %}
-                  <img
-                    src="{{ item.product.image.url }}"
-                    class="card-img-top img-fluid"
-                    style="height:250px;object-fit:cover;"
-                    alt="{{ item.product.name }}">
+              <div class="card h-100 shadow border-0 {% if product.stock == 0 %}out-of-stock{% endif %}">
+                {% if product.image %}
+                  <img src="{{ product.image.url }}"
+                       class="card-img-top img-fluid"
+                       style="height:250px;object-fit:cover;"
+                       alt="{{ product.name }}">
                 {% endif %}
-                <div class="card-body">
-                  <h5 class="card-title">{{ item.product.name }}</h5>
-                  <p class="card-text">{{ item.product.description }}</p>
+                <div class="card-body position-relative">
+                  {% if product.stock == 0 %}
+                    <h1>Out of stock</h1>
+                  {% endif %}
+                  <h5 class="card-title">{{ product.name }}</h5>
+                  <p class="card-text">{{ product.description }}</p>
                   <p class="card-text">
-                    <strong>Price:</strong> ${{ item.product.price }} × {{ item.quantity }}
+                    <strong>Price:</strong> ${{ product.price }} × {{ item.quantity }}
                     = <strong>${{ item.subtotal|floatformat:2 }}</strong>
                   </p>
-                  <form
-            method="post"
-            action="{% url 'remove_from_cart' item.item_id %}"
-            style="display:inline;"
-          >
-            {% csrf_token %}
-            <button type="submit" class="btn btn-sm btn-outline-danger">
-              Remove
-            </button>
-          </form>
+                    <button type="button"
+                        class="btn btn-sm btn-outline-danger"
+                        onclick="submitRemove('{{ item.item_id }}')">
+                        Remove
+                    </button>
                 </div>
               </div>
             </div>
+            {% endwith %}
           {% endfor %}
         </div>
   
         <div class="mt-4 text-end">
           <p class="h4">Total: ${{ total|floatformat:2 }}</p>
-          <button type="submit" class="btn btn-lg btn-success">
+          <button type="submit"
+                  class="btn btn-lg btn-success"
+                  {% if has_oos %}disabled class="btn-secondary"{% endif %}>
             Place Order
           </button>
-          <br><br>
         </div>
       </form>
     {% else %}
       <p class="lead">Your cart is empty.</p>
       <a href="{% url 'shop' %}" class="btn btn-primary">Go Shopping</a>
     {% endif %}
-  </div>
+</div>
 
 <div class="modal fade" id="quantityModal" tabindex="-1" aria-labelledby="quantityModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -170,6 +169,24 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 });
 </script>
+
+<script>
+    function submitRemove(itemId) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = `/remove-from-cart/${itemId}/`;  // Match your `remove_from_cart` URL pattern
+    
+        const csrfToken = document.querySelector('input[name=csrfmiddlewaretoken]').value;
+        const csrfInput = document.createElement('input');
+        csrfInput.type = 'hidden';
+        csrfInput.name = 'csrfmiddlewaretoken';
+        csrfInput.value = csrfToken;
+    
+        form.appendChild(csrfInput);
+        document.body.appendChild(form);
+        form.submit();
+    }
+    </script>
 
 </body>
 </html>
