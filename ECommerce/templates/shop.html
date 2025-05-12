@@ -67,14 +67,18 @@
                     <p class="card-text">{{ product.description }}</p>
                     <p class="card-text"><strong>Price:</strong> ${{ product.price }}</p>
                     <div class="d-flex align-items-center mt-3">
-                        <form method="POST" action="#" class="me-2">
-                            {% csrf_token %}
-                            <button type="button" class="btngreen me-2" onclick="handleStockCheck(this)" data-product-id="{{ product.ID }}" data-product-name="{{ product.name|escapejs }}" data-stock="{{ product.stock }}">
-                                Buy
-                            </button>
-                        </form>
-                        {% if request.user.id == 1 %}
-                        <a href="{% url 'edit_product' product.ID %}" class="btn btn-secondary">Edit</a>
+                        {% if user.is_authenticated %}
+                            <form method="POST" action="#" class="me-2">
+                                {% csrf_token %}
+                                <button type="button" class="btngreen me-2" onclick="handleStockCheck(this)" data-product-id="{{ product.ID }}" data-product-name="{{ product.name|escapejs }}" data-stock="{{ product.stock }}">
+                                    Buy
+                                </button>
+                            </form>
+                            {% if request.user.id == 1 %}
+                            <a href="{% url 'edit_product' product.ID %}" class="btn btn-secondary">Edit</a>
+                            {% endif %}
+                        {% else %}
+                            <p>Please login to purchase items.</p>
                         {% endif %}
                     </div>
                 </div>
@@ -90,7 +94,11 @@
     <span class="close-btn" onclick="closeCart()">&times;</span>
     <div class="sidebar-content">
         <h2>Your Cart</h2>
+    
         {% if user.is_authenticated and cart_items %}
+            <a href="{% url 'checkout' %}" class="btn btn-primary checkout-btn" style="display: block; margin-bottom: 1rem; width: 100%;">
+                Checkout
+            </a>
             {% for item in cart_items %}
             <div class="card mb-3 border-0 shadow-sm">
                 <div class="row g-0 align-items-center">

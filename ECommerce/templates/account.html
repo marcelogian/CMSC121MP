@@ -52,7 +52,8 @@
     <div class="login-container">
         <div class="login-form">
             {% if user.is_authenticated %}
-                <h2>Welcome, {{ user.username }}!</h2>
+                <h1 class="display-4 fw-bold text-black mb-4">Welcome,</h1>
+                <h1>{{ user.username }}!</h1><br>
 
                 {% if user.id == 1 %}
                     <div class="admin-box">
@@ -93,6 +94,9 @@
     <div class="sidebar-content">
         <h2>Your Cart</h2>
         {% if user.is_authenticated and cart_items %}
+        <a href="{% url 'checkout' %}" class="btn btn-primary checkout-btn" style="display: block; margin-bottom: 1rem; width: 100%;">
+            Checkout
+        </a>
             {% for item in cart_items %}
             <div class="card mb-3 border-0 shadow-sm">
                 <div class="row g-0 align-items-center">

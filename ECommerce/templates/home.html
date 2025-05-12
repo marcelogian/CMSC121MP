@@ -14,7 +14,7 @@
 </head>
 <body>
 
-<nav class="navbar">
+<nav class="navbar" style="position: relative; z-index: 10;">
     <ul>
         <li>
             <a href="/shop" class="nav-icon-link">
@@ -50,18 +50,23 @@
 
 <div class="background-container">
     <div class="content-container d-flex justify-content-center align-items-center h-100">
-        <div class="text-center">
-            <h1 class="display-4 fw-bold text-white mb-4">Welcome to GMS!</h1>
-            <a href="/shop" class="btn">SHOP NOW!</a>
+        <div class="text-center bg-white bg-opacity-75 p-4 rounded-4 shadow" style="max-width: 400px;">
+            <h1 class="display-4 fw-bold mb-4">Welcome to GMS!</h1>
+            <a href="/shop" class="btn btn-primary">SHOP NOW!</a>
         </div>
     </div>
 </div>
 
-<div id="cartSidebar" class="cart-sidebar">
-    <span class="close-btn" onclick="closeCart()">&times;</span>
-    <div class="sidebar-content">
+<!-- Cart Sidebar - appears above navbar -->
+<div id="cartSidebar" class="cart-sidebar"
+     style="position: fixed; top: 0; right: 0; width: 300px; height: 100%; z-index: 1000; background-color: white; transform: translateX(100%); transition: transform 0.3s ease;">
+    <span class="close-btn" onclick="closeCart()" style="cursor: pointer; font-size: 1.5rem; position: absolute; top: 10px; right: 15px;">&times;</span>
+    <div class="sidebar-content p-3 mt-4">
         <h2>Your Cart</h2>
         {% if user.is_authenticated and cart_items %}
+        <a href="{% url 'checkout' %}" class="btn btn-primary checkout-btn" style="display: block; margin-bottom: 1rem; width: 100%;">
+            Checkout
+        </a>
             {% for item in cart_items %}
             <div class="card mb-3 border-0 shadow-sm">
                 <div class="row g-0 align-items-center">
@@ -92,26 +97,32 @@
     </div>
 </div>
 
-<div id="cartOverlay" class="overlay" onclick="closeCart()"></div>
+<!-- Overlay behind the cart -->
+<div id="cartOverlay" class="overlay"
+     style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 900; display: none;"
+     onclick="closeCart()">
+</div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const cartButton = document.getElementById('cartButton');
+        const cartSidebar = document.getElementById('cartSidebar');
+        const cartOverlay = document.getElementById('cartOverlay');
 
-        cartButton.addEventListener('click', function(e) {
+        cartButton.addEventListener('click', function (e) {
             e.preventDefault();
             openCart();
         });
 
         function openCart() {
-            document.getElementById('cartSidebar').classList.add('open');
-            document.getElementById('cartOverlay').classList.add('show');
+            cartSidebar.style.transform = 'translateX(0)';
+            cartOverlay.style.display = 'block';
             document.body.classList.add('cart-open');
         }
 
         function closeCart() {
-            document.getElementById('cartSidebar').classList.remove('open');
-            document.getElementById('cartOverlay').classList.remove('show');
+            cartSidebar.style.transform = 'translateX(100%)';
+            cartOverlay.style.display = 'none';
             document.body.classList.remove('cart-open');
         }
 

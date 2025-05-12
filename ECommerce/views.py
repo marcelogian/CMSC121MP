@@ -13,8 +13,15 @@ from django.http import HttpResponseForbidden
 
 
 def home(request):
-    context = {}
-    return render(request, 'home.html', context)
+    cart_items = []
+
+    if request.user.is_authenticated:
+        cart = Cart.objects.filter(user=request.user).first()
+        if cart:
+            cart_items = CartItem.objects.filter(cart=cart).select_related('product')
+
+    return render(request, 'home.html', {'cart_items': cart_items})
+
 
 def shop_view(request):
     products = Product.objects.all()
@@ -71,16 +78,41 @@ def remove_from_cart(request, item_id):
 @login_required
 def checkout_view(request):
     cart = get_object_or_404(Cart, user=request.user)
+    cart_items_qs = CartItem.objects.filter(cart=cart).select_related('product')
+
+    cart_items_qs = (
+        CartItem.objects
+        .filter(cart=cart)
+        .select_related('product')
+    )
+
+    line_items = []
+    total = 0
+    for ci in cart_items_qs:
+        subtotal = ci.quantity * ci.product.price
+        total += subtotal
+        line_items.append({
+            'item_id':  ci.id,  
+            'product':   ci.product,
+            'quantity':  ci.quantity,
+            'subtotal':  subtotal,
+        })
+
     if request.method == 'POST':
         order = Order.objects.create(user=request.user)
-        for item in cart.cartitem_set.all():
-            OrderItem.objects.create(order=order, product=item.product, quantity=item.quantity)
-        cart.cartitem_set.all().delete()
+        for ci in cart_items_qs:
+            OrderItem.objects.create(
+                order=order,
+                product=ci.product,
+                quantity=ci.quantity
+            )
+        cart_items_qs.delete()
         return redirect('orders')
-    return render(request, 'checkout.html', {'cart': cart})
 
-def orders(request):
-    return render(request, 'orders.html')
+    return render(request, 'checkout.html', {
+        'line_items': line_items,
+        'total':      total,
+    })
 
 def signup(request):
     if request.method == 'POST':
@@ -157,3 +189,13 @@ def edit_product(request, product_id):
         form = ProductForm(instance=product)
 
     return render(request, 'edit_product.html', {'form': form, 'product': product})
+
+@login_required
+def orders(request):
+    cart_items = []
+    if request.user.is_authenticated:
+        cart = Cart.objects.filter(user=request.user).first()
+        if cart:
+            cart_items = CartItem.objects.filter(cart=cart).select_related('product')
+    return render(request, 'orders.html', {'cart_items': cart_items})
+
