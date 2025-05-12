@@ -35,20 +35,6 @@ def product_search(request):
     products = Product.objects.filter(name__icontains=query) if query else []
     return render(request, 'search_results.html', {'products': products, 'query': query})
 
-@csrf_protect
-def login_view(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            auth_login(request, user)
-            return redirect('home')
-        else:
-            messages.error(request, 'Invalid username or password.')
-    return render(request, 'account.html')
-
 @login_required
 def add_to_cart(request):
     if request.method == 'POST':
@@ -77,7 +63,10 @@ def remove_from_cart(request, item_id):
     cart = get_object_or_404(Cart, user=request.user)
     item = get_object_or_404(CartItem, id=item_id, cart=cart)
     item.delete()
-    return redirect('shop')
+    referer = request.META.get('HTTP_REFERER')  # the previous page
+    if referer:
+        return redirect(referer)
+    return redirect('shop')  # fallback if no referer
 
 @login_required
 def checkout_view(request):
@@ -112,14 +101,18 @@ def login_view(request):
     from django.contrib import messages
 
     if request.user.is_authenticated:
-        return render(request, 'account.html')  # already logged in
+        cart_items = []
+        cart = Cart.objects.filter(user=request.user).first()
+        if cart:
+            cart_items = CartItem.objects.filter(cart=cart).select_related('product')
+        return render(request, 'account.html', {'cart_items': cart_items})  # <-- send cart_items
 
     form = AuthenticationForm(request, data=request.POST or None)
 
     if request.method == 'POST':
         if form.is_valid():
             login(request, form.get_user())
-            return redirect('account')  # back to account page to now see logout
+            return redirect('account')
         else:
             messages.error(request, "Invalid username or password.")
 
