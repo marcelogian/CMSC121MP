@@ -1,5 +1,15 @@
+import random
+from datetime import timedelta
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
+
+def random_delivery_time():
+    """
+    Returns a datetime 5–30 minutes from now.
+    """
+    minutes = random.randint(5, 30)
+    return timezone.now() + timedelta(minutes=minutes)
 
 class Product(models.Model):
     ID = models.AutoField(primary_key=True)  # match your SQL schema
@@ -16,11 +26,20 @@ class Product(models.Model):
         db_table = 'ECommerce_product' 
 
 class Order(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    date_ordered = models.DateTimeField(auto_now_add=True)
+    user           = models.ForeignKey(User, on_delete=models.CASCADE)
+    date_ordered   = models.DateTimeField(auto_now_add=True)
+    delivery_date  = models.DateTimeField(default=random_delivery_time)
 
     def __str__(self):
         return f"Order #{self.id} by {self.user.username}"
+
+    @property
+    def delivered(self):
+        """
+        Returns True exactly once now >= delivery_date.
+        No need to store this in the DB or run any jobs.
+        """
+        return timezone.now() >= self.delivery_date
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
