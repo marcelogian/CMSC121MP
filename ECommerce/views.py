@@ -83,14 +83,11 @@ def orders(request):
     return render(request, 'orders.html')
 
 def signup(request):
-    return render(request, 'signup.html')
-
-def signup(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('account')  # or wherever you want to redirect
+            return redirect('account')
     else:
         form = CustomUserCreationForm()
     return render(request, 'signup.html', {'form': form})
