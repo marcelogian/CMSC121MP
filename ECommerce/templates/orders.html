@@ -74,8 +74,8 @@
                 {% for item in order.items %}
                 <li class="list-group-item d-flex justify-content-between">
                     <div>
-                        <strong>{{ item.product.name }}</strong><br>
-                        <small>{{ item.product.description|truncatewords:12 }}</small>
+                        <strong>{{ item.product_name }}</strong><br>
+                        <small>{{ item.product_description|truncatewords:12 }}</small>
                     </div>
                     <span>Qty: {{ item.quantity }}</span>
                 </li>
@@ -101,13 +101,13 @@
                 <div class="row g-0 align-items-center">
                     <div class="col-4">
                         {% if item.product.image %}
-                        <img src="{{ item.product.image.url }}" class="img-fluid rounded-start" style="height: 80px; object-fit: cover;" alt="{{ item.product.name }}">
+                        <img src="{{ item.product.image.url }}" class="img-fluid rounded-start" style="height: 80px; object-fit: cover;" alt="{{ item.product_name }}">
                         {% endif %}
                     </div>
                     <div class="col-8">
                         <div class="card-body p-2">
-                            <h6 class="card-title mb-1">{{ item.product.name }}</h6>
-                            <p class="card-text mb-1"><small>{{ item.product.description|truncatewords:10 }}</small></p>
+                            <h6 class="card-title mb-1">{{ item.product_name }}</h6>
+                            <p class="card-text mb-1"><small>{{ item.product_description|truncatewords:10 }}</small></p>
                             <p class="card-text mb-1">Qty: {{ item.quantity }}</p>
                             <form method="POST" action="{% url 'remove_from_cart' item.id %}">
                                 {% csrf_token %}

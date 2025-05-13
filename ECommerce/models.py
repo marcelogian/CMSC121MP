@@ -35,12 +35,23 @@ class Order(models.Model):
         return timezone.now() >= self.delivery_date
 
 class OrderItem(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, to_field='ID', on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(default=0)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
+    product = models.ForeignKey(Product, null=True, blank=True, on_delete=models.SET_NULL)
+    product_name = models.CharField(max_length=255)
+    product_description = models.TextField(blank=True)
+    product_price = models.DecimalField(max_digits=10, decimal_places=2)
+    quantity = models.PositiveIntegerField()
 
     def __str__(self):
-        return f"{self.quantity} x {self.product.name}"
+        if self.product:
+            return f"{self.quantity} x {self.product.name}"
+        return f"{self.quantity} x [Deleted Product]"
+    
+    def save(self, *args, **kwargs):
+        if self.product:
+            self.product_name = self.product.name
+            self.product_price = self.product.price
+        super().save(*args, **kwargs)
 
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

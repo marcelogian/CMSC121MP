@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import AuthenticationForm
 from django.views.decorators.csrf import csrf_protect
 from .models import Product, Order, OrderItem, Cart, CartItem
 from .forms import CustomUserCreationForm, ProductForm
@@ -111,6 +112,9 @@ def checkout_view(request):
             OrderItem.objects.create(
                 order=order,
                 product=product,
+                product_name=product.name,
+                product_description=product.description,
+                product_price=product.price,
                 quantity=ci.quantity
             )
 
@@ -149,7 +153,7 @@ def login_view(request):
 
     if request.method == 'POST':
         if form.is_valid():
-            login(request, form.get_user())
+            auth_login(request, form.get_user())
             return redirect('account')
         else:
             messages.error(request, "Invalid username or password.")
@@ -208,13 +212,13 @@ def orders(request):
             cart_items = CartItem.objects.filter(cart=cart).select_related('product')
 
     if request.user.id == 1:
-        orders_qs = Order.objects.all().prefetch_related('orderitem_set__product').select_related('user')
+        orders_qs = Order.objects.all().prefetch_related('items__product').select_related('user')
     else:
-        orders_qs = Order.objects.filter(user=request.user).prefetch_related('orderitem_set__product')
+        orders_qs = Order.objects.filter(user=request.user).prefetch_related('items__product')
 
     order_data = []
     for order in orders_qs:
-        items = order.orderitem_set.all()
+        items = order.items.all()
         delivered = order.delivery_date is not None and order.delivery_date <= timezone.now()
         order_data.append({
             'id': order.id,
