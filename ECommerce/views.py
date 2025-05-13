@@ -9,6 +9,12 @@ from .forms import CustomUserCreationForm, ProductForm
 from django.http import HttpResponseForbidden
 from django.utils import timezone
 from django.db import transaction
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import logout
+from django.shortcuts import render, redirect
+from django.utils import timezone
+from django.contrib.auth import login
+from django.contrib import messages
 
 def home(request):
     cart_items = []
@@ -170,7 +176,7 @@ def selling_screen(request):
         return redirect('account')
 
     if request.method == 'POST':
-        form = ProductForm(request.POST, request.FILES)  # include request.FILES for image uploads
+        form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
 
