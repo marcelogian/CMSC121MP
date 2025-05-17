@@ -1,0 +1,183 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/shop.css' %}">
+    <link rel="stylesheet" href="{% static 'css/account.css' %}">
+</head>
+<body>
+
+<nav class="navbar">
+    <ul>
+        <li>
+            <a href="/shop" class="nav-icon-link">
+                <i class="bi bi-basket2-fill"></i>
+                <span>SHOP</span>
+            </a>
+        </li>
+        <li class="invisible">
+            <a href="#" id="cartButton" class="nav-icon-link">
+                <i class="bi bi-cart-fill"></i>
+                <span>CART</span>
+            </a>
+        </li>
+        <li class="logo-item">
+            <a href="{% url 'home' %}">
+                <img src="{% static 'images/logo.png' %}" alt="Logo" class="logo">
+            </a>
+        </li>
+        <li>
+            <a href="/orders" class="nav-icon-link">
+                <i class="bi bi-bag-fill"></i>
+                <span>ORDERS</span>
+            </a>
+        </li>
+        <li>
+            <a href="/account" class="nav-icon-link">
+                <i class="bi bi-person-fill"></i>
+                <span>ACCOUNT</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+
+<div class="container mt-4">
+    <h1 class="mb-4">Checkout</h1>
+
+    {% if line_items %}
+        <form method="post">
+            {% csrf_token %}
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+                {% for item in line_items %}
+                    {% with product=item.product %}
+                    <div class="col">
+                        <div class="card h-100 shadow border-0 {% if product.stock == 0 %}out-of-stock{% endif %}">
+                            {% if product.image %}
+                                <img src="{{ product.image.url }}" class="card-img-top img-fluid" style="height:250px;object-fit:cover;" alt="{{ product.name }}">
+                            {% endif %}
+                            <div class="card-body position-relative">
+                                {% if product.stock == 0 %}
+                                    <h1>Out of stock</h1>
+                                {% endif %}
+                                <h5 class="card-title">{{ product.name }}</h5>
+                                <p class="card-text">{{ product.description }}</p>
+                                <p class="card-text">
+                                    <strong>Price:</strong> ${{ product.price }} × {{ item.quantity }}
+                                    = <strong>${{ item.subtotal|floatformat:2 }}</strong>
+                                </p>
+                                <button type="button" class="btn btn-sm btn-outline-danger" onclick="submitRemove('{{ item.item_id }}')">Remove</button>
+                            </div>
+                        </div>
+                    </div>
+                    {% endwith %}
+                {% endfor %}
+            </div>
+
+            <div class="mt-4 text-end">
+                <p class="h4">Total: ${{ total|floatformat:2 }}</p>
+                <button type="submit" class="btn btn-lg btn-success" {% if has_oos %}disabled class="btn-secondary"{% endif %}>
+                    Place Order
+                </button>
+            </div>
+        </form>
+    {% else %}
+        <p class="lead">Your cart is empty.</p>
+        <a href="{% url 'shop' %}" class="btn btn-primary">Go Shopping</a>
+    {% endif %}
+</div>
+
+<div class="modal fade" id="quantityModal" tabindex="-1" aria-labelledby="quantityModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form method="POST" action="{% url 'add_to_cart' %}">
+            {% csrf_token %}
+            <input type="hidden" name="product_id" id="modalProductId">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="quantityModalLabel">Add to Cart</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="modalProductName" class="fw-bold"></p>
+                    <p>Stock Available: <span id="modalStock"></span></p>
+                    <label for="modalQuantity">Quantity:</label>
+                    <input type="number" name="quantity" id="modalQuantity" class="form-control" min="1" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Confirm</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const quantityModal = document.getElementById('quantityModal');
+    quantityModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget;
+        const productId = button.getAttribute('data-product-id');
+        const productName = button.getAttribute('data-product-name');
+        const stock = button.getAttribute('data-stock');
+
+        document.getElementById('modalProductId').value = productId;
+        document.getElementById('modalProductName').textContent = productName;
+        document.getElementById('modalStock').textContent = stock;
+        document.getElementById('modalQuantity').value = 1;
+        document.getElementById('modalQuantity').max = stock;
+    });
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const quantityModal = new bootstrap.Modal(document.getElementById('quantityModal'));
+
+    window.handleStockCheck = function (button) {
+        const stock = parseInt(button.getAttribute('data-stock'));
+        const productId = button.getAttribute('data-product-id');
+        const productName = button.getAttribute('data-product-name');
+
+        if (stock === 0) {
+            alert(`Sorry, "${productName}" is out of stock.`);
+            return;
+        }
+
+        document.getElementById('modalProductId').value = productId;
+        document.getElementById('modalProductName').textContent = productName;
+        document.getElementById('modalStock').textContent = stock;
+        const quantityInput = document.getElementById('modalQuantity');
+        quantityInput.value = 1;
+        quantityInput.max = stock;
+
+        quantityModal.show();
+    };
+});
+</script>
+
+<script>
+    function submitRemove(itemId) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = `/remove-from-cart/${itemId}/`;  // Match your `remove_from_cart` URL pattern
+    
+        const csrfToken = document.querySelector('input[name=csrfmiddlewaretoken]').value;
+        const csrfInput = document.createElement('input');
+        csrfInput.type = 'hidden';
+        csrfInput.name = 'csrfmiddlewaretoken';
+        csrfInput.value = csrfToken;
+    
+        form.appendChild(csrfInput);
+        document.body.appendChild(form);
+        form.submit();
+    }
+</script>
+
+</body>
+</html>

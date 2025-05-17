@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Product</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/account.css' %}">
+    <style>
+        body {
+            background-color: #f7f9fc;
+        }
+        .form-container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 6px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+            margin-top: 2rem;
+        }
+        .right-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <!-- Left form panel -->
+            <div class="col-md-9">
+                <div class="form-container">
+                    <h4>Edit Product: {{ product.name }}</h4>
+                    <form method="POST" enctype="multipart/form-data" id="form-id">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Name</label><br>
+                            {{ form.name }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Description</label><br>
+                            {{ form.description }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Price</label><br>
+                            {{ form.price }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Stock</label><br>
+                            {{ form.stock }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Image</label><br>
+                            {{ form.image }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Right save buttons -->
+            <div class="col-md-3">
+                <div class="right-buttons">
+                    <button type="submit" form="form-id" name="_addanother" class="btngreen">Save Changes</button>
+                    <button type="submit" form="form-id" name="delete" class="btnred" onclick="return confirm('Are you sure you want to delete this item?')">Delete Item</button>
+                    <a href="{% url 'shop' %}" class="btn btn-info text-white">Back to Shop</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

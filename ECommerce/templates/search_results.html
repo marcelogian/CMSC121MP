@@ -1,0 +1,187 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results - Your Shop</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/shop.css' %}">
+    <link rel="stylesheet" href="{% static 'css/account.css' %}">
+</head>
+<body>
+
+<nav class="navbar">
+    <ul>
+        <li><a href="/shop" class="nav-icon-link"><i class="bi bi-basket2-fill"></i><span>SHOP</span></a></li>
+        <li><a href="#" id="cartButton" class="nav-icon-link"><i class="bi bi-cart-fill"></i><span>CART</span></a></li>
+        <li class="logo-item"><a href="{% url 'home' %}"><img src="{% static 'images/logo.png' %}" alt="Logo" class="logo"></a></li>
+        <li><a href="/orders" class="nav-icon-link"><i class="bi bi-bag-fill"></i><span>ORDERS</span></a></li>
+        <li><a href="/account" class="nav-icon-link"><i class="bi bi-person-fill"></i><span>ACCOUNT</span></a></li>
+    </ul>
+</nav>
+
+<div class="shop-search-container">
+    <form class="search-form" action="/shop/search/" method="get">
+        <input type="text" name="q" class="search-input" placeholder="Search products..." value="{{ query }}" required>
+        <button type="submit" class="search-button">Search</button>
+    </form>
+</div>
+
+<div class="container mt-4">
+    <h2 class="mb-4">Search Results for "{{ query }}"</h2>
+    {% if products %}
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        {% for product in products %}
+        <div class="col">
+            <div class="card h-100 shadow border-0">
+                {% if product.image %}
+                <img src="{{ product.image.url }}" class="card-img-top img-fluid" style="height: 250px; object-fit: cover;" alt="{{ product.name }}">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text">{{ product.description }}</p>
+                    <p class="card-text"><strong>Price:</strong> ${{ product.price }}</p>
+                    <div class="d-flex align-items-center mt-3">
+                        {% if user.is_authenticated %}
+                            <form method="POST" action="#" class="me-2">
+                                {% csrf_token %}
+                                <button type="button" class="btngreen me-2" onclick="handleStockCheck(this)" data-product-id="{{ product.ID }}" data-product-name="{{ product.name|escapejs }}" data-stock="{{ product.stock }}">
+                                    Buy
+                                </button>
+                            </form>
+                            {% if request.user.id == 1 %}
+                            <a href="{% url 'edit_product' product.ID %}" class="btn btn-secondary">Edit</a>
+                            {% endif %}
+                        {% else %}
+                            <p>Please login to purchase items.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-muted">No products found.</p>
+    {% endif %}
+</div>
+
+<div id="cartSidebar" class="cart-sidebar">
+    <span class="close-btn" onclick="closeCart()">&times;</span>
+    <div class="sidebar-content">
+        <h2>Your Cart</h2>
+        {% if user.is_authenticated and cart_items %}
+            <a href="{% url 'checkout' %}" class="btn btn-primary checkout-btn" style="display: block; margin-bottom: 1rem; width: 100%;">Checkout</a>
+            {% for item in cart_items %}
+            <div class="card mb-3 border-0 shadow-sm">
+                <div class="row g-0 align-items-center">
+                    <div class="col-4">
+                        {% if item.product.image %}
+                        <img src="{{ item.product.image.url }}" class="img-fluid rounded-start" style="height: 80px; object-fit: cover;" alt="{{ item.product.name }}">
+                        {% endif %}
+                    </div>
+                    <div class="col-8">
+                        <div class="card-body p-2">
+                            <h6 class="card-title mb-1">{{ item.product.name }}</h6>
+                            <p class="card-text mb-1"><small>{{ item.product.description|truncatewords:10 }}</small></p>
+                            <p class="card-text mb-1">Qty: {{ item.quantity }}</p>
+                            <form method="POST" action="{% url 'remove_from_cart' item.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% elif user.is_authenticated %}
+            <p class="text-muted">No items yet...</p>
+        {% else %}
+        <p class="text-muted">Please log in to view your cart.</p>
+        {% endif %}
+    </div>
+</div>
+
+<div id="cartOverlay" class="overlay" onclick="closeCart()"></div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const cartButton = document.getElementById('cartButton');
+    cartButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        openCart();
+    });
+
+    function openCart() {
+        document.getElementById('cartSidebar').classList.add('open');
+        document.getElementById('cartOverlay').classList.add('show');
+        document.body.classList.add('cart-open');
+    }
+
+    function closeCart() {
+        document.getElementById('cartSidebar').classList.remove('open');
+        document.getElementById('cartOverlay').classList.remove('show');
+        document.body.classList.remove('cart-open');
+    }
+
+    window.openCart = openCart;
+    window.closeCart = closeCart;
+});
+</script>
+
+<div class="modal fade" id="quantityModal" tabindex="-1" aria-labelledby="quantityModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form method="POST" action="{% url 'add_to_cart' %}">
+            {% csrf_token %}
+            <input type="hidden" name="product_id" id="modalProductId">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="quantityModalLabel">Add to Cart</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="modalProductName" class="fw-bold"></p>
+                    <p>Stock Available: <span id="modalStock"></span></p>
+                    <label for="modalQuantity">Quantity:</label>
+                    <input type="number" name="quantity" id="modalQuantity" class="form-control" min="1" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Confirm</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const quantityModal = new bootstrap.Modal(document.getElementById('quantityModal'));
+
+    window.handleStockCheck = function (button) {
+        const stock = parseInt(button.getAttribute('data-stock'));
+        const productId = button.getAttribute('data-product-id');
+        const productName = button.getAttribute('data-product-name');
+
+        if (stock === 0) {
+            alert(`Sorry, "${productName}" is out of stock.`);
+            return;
+        }
+
+        document.getElementById('modalProductId').value = productId;
+        document.getElementById('modalProductName').textContent = productName;
+        document.getElementById('modalStock').textContent = stock;
+        const quantityInput = document.getElementById('modalQuantity');
+        quantityInput.value = 1;
+        quantityInput.max = stock;
+
+        quantityModal.show();
+    };
+});
+</script>
+
+</body>
+</html>
