@@ -1,8 +1,9 @@
 body {
-    background-color: #fafafa;
+    background-color: #fafafa; 
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    overflow: hidden;
 }
 
 .background-container {
@@ -27,6 +28,116 @@ body {
     bottom: 0;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.3);
+}
+
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+    animation: slideInLeft 0.5s ease forwards;
+    margin-top: -45px;
+}
+
+.login-container:hover {
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+}
+
+.login-form {
+    background-color: rgba(255, 255, 255, 0.85);
+    padding: 40px 40px;
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    transition: box-shadow 0.3s ease;
+    text-align: center;
+}
+
+.login-form h2 {
+    margin-bottom: 25px;
+    font-size: 26px;
+    font-weight: 600;
+    text-align: center;
+    color: #1b5e20; /* Dark green title */
+}
+
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.form-group label {
+    font-weight: 500;
+    display: block;
+    margin-left: -2px;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 15px;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    margin-left: -15px;
+}
+
+.form-group input:focus {
+    outline: none;
+    box-shadow: none;
+    border-color: #4caf50; /* optional: subtle border color on focus */
+}
+
+
+.btn {
+    width: 100%;
+    background-color: #4caf50; 
+    color: white;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color:#43a047;
+}
+
+.signup-link {
+    margin-top: 25px;
+    text-align: center;
+    font-size: 14px;
+    color: #444;
+    margin-bottom: -5px;
+}
+
+.signup-link a {
+    color: #1b5e20; /* Dark green link */
+    font-weight: 500;
+    text-decoration: none;
+    transition: text-decoration 0.2s;
+}
+
+.signup-link a:hover {
+    text-decoration: underline;
 }
 
 /* Navbar Styles */
@@ -111,95 +222,6 @@ body {
     transform: scale(1.1);
     filter: brightness(1.1);
     transition: transform 0.3s ease;
-}
-
-/* Login Form Styles */
-.login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    position: relative;
-    z-index: 1;
-}
-
-.login-form {
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 40px;
-    border-radius: 10px;
-    width: 100%;
-    max-width: 400px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    text-align: center;
-    align-items: center;
-}
-
-.login-form h2 {
-    margin-bottom: 20px;
-    font-size: 1.8rem;
-}
-
-.form-group {
-    margin-bottom: 15px;
-    text-align: left;
-}
-
-.form-group label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-.form-group input {
-    width: 100%;
-    padding: 10px;
-    margin: 5px 0;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    font-size: 1rem;
-}
-
-.btn,
-.btngreen,
-.btnred {
-    color: white;
-    padding: 15px 30px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1.2rem;
-    transition: background-color 0.3s ease;
-}
-
-.btn {
-    background-color: #3498db;
-}
-
-.btn:hover {
-    background-color: #2980b9;
-}
-
-.btngreen {
-    background-color: #218d39;
-}
-
-.btnred {
-    background-color: #e32121;
-}
-
-/* Signup Link */
-.signup-link {
-    margin-top: 15px;
-    font-size: 1rem;
-}
-
-.signup-link a {
-    color: #3498db;
-    text-decoration: none;
-}
-
-.signup-link a:hover {
-    text-decoration: underline;
 }
 
 /* Cart Sidebar */

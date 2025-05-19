@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=C:\Users\RLF\OneDrive - Real LIFE Foundation, Inc\Documents\CMSC121MP\CMSC121MP\venv
+set VIRTUAL_ENV=C:\Users\Sean Talagon\CMSC121MP\CMSC121MP\venv
 
 if not defined PROMPT set PROMPT=$P$G
 

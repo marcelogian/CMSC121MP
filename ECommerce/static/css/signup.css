@@ -34,6 +34,18 @@ body {
     background-color: rgba(0, 0, 0, 0.30); 
 }
 
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
 .signup-container {
     background-color: rgba(255, 255, 255, 0.85);
     padding: 40px 40px;
@@ -42,7 +54,7 @@ body {
     width: 100%;
     max-width: 400px;
     transition: box-shadow 0.3s ease;
-
+    animation: slideInLeft 0.5s ease forwards;
 }
 
 .signup-container:hover {
@@ -65,9 +77,9 @@ body {
 
 .form-group label {
     font-weight: 500;
-    margin-bottom: 6px;
+    margin-bottom: 1px;
     display: block;
-    margin-left: -15px;
+    margin-left: -2px;
 }
 
 .form-group input {
@@ -75,7 +87,7 @@ body {
     padding: 12px 14px;
     font-size: 15px;
     border: 1px solid #ccc;
-    border-radius: 10px;
+    border-radius: 25px;
     transition: border-color 0.3s, box-shadow 0.3s;
     margin-left: -15px;
 }
@@ -106,10 +118,11 @@ body {
 }
 
 .login-link {
-    margin-top: 20px;
+    margin-top: 25px;
     text-align: center;
     font-size: 14px;
     color: #444;
+    margin-bottom: -5px;
 }
 
 .login-link a {
@@ -122,4 +135,51 @@ body {
 .login-link a:hover {
     text-decoration: underline;
 }
+
+/* Password Validation Rules Styling */
+.password-rules , .username-rules {
+    font-size: 14px;
+    color: #444;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    padding: 12px;
+    border-radius: 5px;
+    margin-top: 22px;
+    max-width: 300px;
+    margin-left: auto;  /* Center horizontally */
+    margin-right: auto; /* Center horizontally */
+    text-align: center; /* Center text */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    display: none;
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: slideIn 0.5s forwards;
+}
+
+/* Slide-in Animation */
+@keyframes slideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Optionally, add a hover effect for the input */
+.form-group input:focus + .password-rules {
+    display: block;
+}
+
+/* Center the form input */
+.form-group input {
+    display: block;
+    margin: 0 auto;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
 
