@@ -89,6 +89,19 @@ body {
     transition: transform 0.3s ease; 
 }
 
+.background-container {
+    background-image: url('/static/images/orders.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
 .cart-sidebar {
     height: 100%;
     width: 0;
@@ -136,3 +149,28 @@ body.cart-open {
     opacity: 1;
     pointer-events: all;
 }
+.card {
+    font-family: 'Cinzel', serif;
+    border-radius: 10px;
+    overflow: hidden;
+    background: linear-gradient(145deg, #1a1a1a, #111); /* dark background */
+    border: 2px solid #d4af37; /* gold border */
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.4); /* soft gold glow */
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+    color: #fefae0;
+    position: relative;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 18px rgba(212, 175, 55, 0.6);
+}
+
+.card-img-top {
+    height: 250px;
+    object-fit: cover;
+    border-bottom: 2px solid #d4af37;
+}
+
+
+
